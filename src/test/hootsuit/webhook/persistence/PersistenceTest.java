@@ -66,11 +66,11 @@ public class PersistenceTest {
 	 */
 	@Test
 	public void getAllDestinationMessagesCorrectly() {
-		List<Message> googleResult = (List<Message>) messageRepository.findByDestination(googleDest);
+		List<Message> googleResult = (List<Message>) messageRepository.findByDestinationOrderByIdAsc(googleDest);
 		assertThat(googleResult.size()).isEqualTo(2);
 		assertThat(googleResult).contains(googleMessage1, googleMessage2);
 		
-		List<Message> trelloResult = (List<Message>) messageRepository.findByDestination(trelloDest);
+		List<Message> trelloResult = (List<Message>) messageRepository.findByDestinationOrderByIdAsc(trelloDest);
 		assertThat(trelloResult.size()).isEqualTo(0);
 	}
 
