@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.LinkedMultiValueMap;
@@ -110,9 +113,9 @@ public class DestinationServiceTest {
 	
 	@Test
 	public void postMessageToDestinationTest() {
-		MultiValueMap<String, Object> request = new LinkedMultiValueMap<>();
-		request.add("msg-body", "#safe=off&q=hackathon");
-		request.add("content-type", "text/html");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.TEXT_HTML);
+		HttpEntity<String> request = new HttpEntity<String>("#safe=off&q=hackathon" ,headers);
 		
 		Map<String, Long> urlVariables = new LinkedHashMap<>();
 		urlVariables.put("id", googleDest.getId());
