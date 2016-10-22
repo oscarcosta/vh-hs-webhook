@@ -20,7 +20,7 @@ public class Destination {
 	@Column(nullable = false)
 	private String url;
 	
-	@OneToMany(mappedBy = "destination", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "destination", cascade = CascadeType.REMOVE)
 	private List<Message> messages;
 	
 	protected Destination() {
