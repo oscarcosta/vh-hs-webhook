@@ -39,6 +39,11 @@ public class DestinationService {
 	
 	@DeleteMapping("/destinations/{id}")
 	public void deleteDestination(@PathVariable("id") Long id) {
+		Destination destination = destinationRepository.findOne(id);
+		if (destination == null) {
+			throw new NoSuchElementException("Does not exist destination with id " + id);
+		}
+		
 		destinationRepository.delete(id);
 	}
 	
@@ -55,7 +60,7 @@ public class DestinationService {
 		}
 		
 		messageRepository.save(new Message(messageBody, contentType, destination));
-		// POST the message in the destination
+		// TODO POST the message in the destination
 	}
 	
 	private void validateParam(String param, String paramName) {
