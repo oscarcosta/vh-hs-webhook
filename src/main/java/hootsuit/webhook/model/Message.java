@@ -1,5 +1,7 @@
 package hootsuit.webhook.model;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,6 +22,9 @@ public class Message {
 	@Column(nullable = false)
 	private String contentType;
 	
+	@Column(nullable = false)
+	private Timestamp timestamp;
+	
 	@ManyToOne(optional = false)
 	private Destination destination;
 	
@@ -30,6 +35,7 @@ public class Message {
 		super();
 		this.messageBody = messageBody;
 		this.contentType = contentType;
+		this.timestamp = new Timestamp(System.currentTimeMillis());
 		this.destination = destination;
 	}
 
@@ -43,6 +49,10 @@ public class Message {
 
 	public String getContentType() {
 		return contentType;
+	}
+	
+	public Timestamp getTimestamp() {
+		return timestamp;
 	}
 
 	public Destination getDestination() {
