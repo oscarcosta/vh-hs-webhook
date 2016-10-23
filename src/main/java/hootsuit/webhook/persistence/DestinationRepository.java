@@ -11,7 +11,12 @@ public interface DestinationRepository extends CrudRepository<Destination, Long>
 	
 	@Modifying
 	@Transactional
-	@Query("update Destination d set d.online = ?1 where d.id = ?2")
-	int setDestinationOnline(Boolean online, Long id);
+	@Query("update Destination d set d.online = true where d.id = ?")
+	int setDestinationOnline(Long id);
+	
+	@Modifying
+	@Transactional
+	@Query("update Destination d set d.online = false where d.id = ?")
+	int setDestinationOffline(Long id);
 
 }

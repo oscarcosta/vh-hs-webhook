@@ -56,17 +56,23 @@ public class PersistenceTest {
 	}
 	
 	/**
-	 * Test the DestinationRepository.setDestinationOnline() method.
+	 * Test the DestinationRepository.DestinationOffline() method.
 	 */
 	@Test
-	public void setDestinationOnlineTest() {
+	public void setDestinationOnlineOfflineTest() {
 		logger.debug("setDestinationOnlineTest");
 		
-		destinationRepository.setDestinationOnline(false, trelloDest.getId());
+		destinationRepository.setDestinationOffline(trelloDest.getId());
 		
 		// Retrieve trelloDest to check the online flag    
 		Destination result = destinationRepository.findOne(trelloDest.getId());
 		assertThat(result.isOnline()).isFalse();
+		
+		destinationRepository.setDestinationOnline(trelloDest.getId());
+		
+		// Retrieve trelloDest to check the online flag    
+		result = destinationRepository.findOne(trelloDest.getId());
+		assertThat(result.isOnline()).isTrue();
 	}
 	
 	/**
@@ -84,18 +90,30 @@ public class PersistenceTest {
 	}
 
 	/**
-	 * Test the MessageRepository.findByDestination() method.
+	 * Test the MessageRepository.findByDestinationOrderByIdAsc() method.
 	 */
 	@Test
-	public void getAllDestinationMessagesCorrectly() {
+	public void getAllDestinationMessagesOrderedCorrectly() {
 		logger.debug("getAllDestinationMessagesCorrectly");
 		
 		List<Message> googleResult = (List<Message>) messageRepository.findByDestinationOrderByIdAsc(googleDest);
 		assertThat(googleResult.size()).isEqualTo(2);
-		assertThat(googleResult).contains(googleMessage1, googleMessage2);
+		assertThat(googleResult).containsSequence(googleMessage1, googleMessage2);
 		
 		List<Message> trelloResult = (List<Message>) messageRepository.findByDestinationOrderByIdAsc(trelloDest);
 		assertThat(trelloResult.size()).isEqualTo(0);
+	}
+	
+	/**
+	 * Test the MessageRepository.findAllByOrderByTimestampAsc() method.
+	 */
+	@Test
+	public void gellAllMessagesOrderedCorrectly() {
+		logger.debug("gellAllMessagesOrdered");
+		
+		List<Message> result = (List<Message>) messageRepository.findAllByOrderByTimestampAsc();
+		assertThat(result.size()).isEqualTo(2);
+		assertThat(result).containsSequence(googleMessage1, googleMessage2);
 	}
 
 }
