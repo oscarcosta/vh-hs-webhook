@@ -1,6 +1,7 @@
 package hootsuit.webhook.services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -53,6 +55,16 @@ public class MessageProcessor {
 		
 		// Direct call
 		processMessagesForDestination(message.getDestination());
+	}
+	
+	/**
+	 * Scheduled method to process the messages saved on database
+	 */
+	@Scheduled(cron="0 */6 * * * *") // Run at minute 0 past every 6th hour.
+	public void scheduledMessagesProcessor() {
+		logger.debug("Executing scheduled message processor at {}", new Date(System.currentTimeMillis()));
+		
+		destinationRepository.findAll().forEach(destination -> processMessagesForDestination(destination));
 	}
 	
 	/**
