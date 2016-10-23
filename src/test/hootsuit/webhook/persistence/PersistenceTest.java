@@ -8,6 +8,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -20,6 +22,8 @@ import hootsuit.webhook.model.*;
 @DataJpaTest
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 public class PersistenceTest {
+	
+	private static final Logger logger = LoggerFactory.getLogger(PersistenceTest.class);
 	
 	@Autowired
 	private DestinationRepository destinationRepository;
@@ -35,6 +39,8 @@ public class PersistenceTest {
 	
 	@Before
 	public void setUp() {
+		logger.debug("setUp");
+		
 		messageRepository.deleteAll();
 		destinationRepository.deleteAll();
 		
@@ -50,10 +56,26 @@ public class PersistenceTest {
 	}
 	
 	/**
+	 * Test the DestinationRepository.setDestinationOnline() method.
+	 */
+	@Test
+	public void setDestinationOnlineTest() {
+		logger.debug("setDestinationOnlineTest");
+		
+		destinationRepository.setDestinationOnline(false, trelloDest.getId());
+		
+		// Retrieve trelloDest to check the online flag    
+		Destination result = destinationRepository.findOne(trelloDest.getId());
+		assertThat(result.isOnline()).isFalse();
+	}
+	
+	/**
 	 * Test the relation between Destination and Message
 	 */
 	@Test
 	public void deleteDestinationCorrectly() {
+		logger.debug("deleteDestinationCorrectly");
+		
 		destinationRepository.delete(googleDest.getId());
 
 		// Tries to find googleDest to ensure it was deleted   
@@ -66,6 +88,8 @@ public class PersistenceTest {
 	 */
 	@Test
 	public void getAllDestinationMessagesCorrectly() {
+		logger.debug("getAllDestinationMessagesCorrectly");
+		
 		List<Message> googleResult = (List<Message>) messageRepository.findByDestinationOrderByIdAsc(googleDest);
 		assertThat(googleResult.size()).isEqualTo(2);
 		assertThat(googleResult).contains(googleMessage1, googleMessage2);

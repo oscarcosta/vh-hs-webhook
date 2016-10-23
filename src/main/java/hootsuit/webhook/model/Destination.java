@@ -23,12 +23,16 @@ public class Destination {
 	@OneToMany(mappedBy = "destination", cascade = CascadeType.REMOVE)
 	private List<Message> messages;
 	
+	@Column(nullable = false)
+	private Boolean online;
+	
 	protected Destination() {
 	}
 	
 	public Destination(String url) {
 		super();
 		this.url = url;
+		this.online = true;
 	}
 	
 	public Long getId() {
@@ -37,6 +41,10 @@ public class Destination {
 	
 	public String getUrl() {
 		return url;
+	}
+	
+	public Boolean isOnline() {
+		return online;
 	}
 		
 	@Override
