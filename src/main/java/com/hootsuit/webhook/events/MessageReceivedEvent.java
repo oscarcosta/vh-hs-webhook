@@ -1,8 +1,8 @@
-package hootsuit.webhook.events;
+package com.hootsuit.webhook.events;
 
 import org.springframework.context.ApplicationEvent;
 
-import hootsuit.webhook.model.Message;
+import com.hootsuit.webhook.model.Message;
 
 public class MessageReceivedEvent extends ApplicationEvent {
 	

@@ -1,4 +1,4 @@
-package hootsuit.webhook.persistence;
+package com.hootsuit.webhook.persistence;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import hootsuit.webhook.model.*;
+import com.hootsuit.webhook.model.*;
 
 public class MessageRepositoryTest extends AbstractRepositoryTest {
 	

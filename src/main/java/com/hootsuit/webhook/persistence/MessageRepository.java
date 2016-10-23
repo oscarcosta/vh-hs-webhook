@@ -1,11 +1,11 @@
-package hootsuit.webhook.persistence;
+package com.hootsuit.webhook.persistence;
 
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import hootsuit.webhook.model.Destination;
-import hootsuit.webhook.model.Message;
+import com.hootsuit.webhook.model.Destination;
+import com.hootsuit.webhook.model.Message;
 
 public interface MessageRepository extends CrudRepository<Message, Long> {
 

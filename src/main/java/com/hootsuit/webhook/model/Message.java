@@ -1,4 +1,4 @@
-package hootsuit.webhook.model;
+package com.hootsuit.webhook.model;
 
 import java.sql.Timestamp;
 

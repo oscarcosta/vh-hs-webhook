@@ -1,4 +1,4 @@
-package hootsuit.webhook.restcontroller;
+package com.hootsuit.webhook.restcontroller;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -24,11 +24,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import hootsuit.webhook.WebhookConfiguration;
-import hootsuit.webhook.model.Destination;
-import hootsuit.webhook.model.Message;
-import hootsuit.webhook.persistence.DestinationRepository;
-import hootsuit.webhook.persistence.MessageRepository;
+import com.hootsuit.webhook.WebhookConfiguration;
+import com.hootsuit.webhook.model.Destination;
+import com.hootsuit.webhook.model.Message;
+import com.hootsuit.webhook.persistence.DestinationRepository;
+import com.hootsuit.webhook.persistence.MessageRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = WebhookConfiguration.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

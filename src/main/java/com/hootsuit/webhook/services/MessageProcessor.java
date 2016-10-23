@@ -1,4 +1,4 @@
-package hootsuit.webhook.services;
+package com.hootsuit.webhook.services;
 
 import java.util.Date;
 import java.util.List;
@@ -17,11 +17,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import hootsuit.webhook.events.MessageReceivedEvent;
-import hootsuit.webhook.model.Destination;
-import hootsuit.webhook.model.Message;
-import hootsuit.webhook.persistence.DestinationRepository;
-import hootsuit.webhook.persistence.MessageRepository;
+import com.hootsuit.webhook.events.MessageReceivedEvent;
+import com.hootsuit.webhook.model.Destination;
+import com.hootsuit.webhook.model.Message;
+import com.hootsuit.webhook.persistence.DestinationRepository;
+import com.hootsuit.webhook.persistence.MessageRepository;
 
 @Service
 public class MessageProcessor {

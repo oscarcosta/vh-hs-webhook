@@ -1,11 +1,11 @@
-package hootsuit.webhook.persistence;
+package com.hootsuit.webhook.persistence;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import hootsuit.webhook.model.Destination;
+import com.hootsuit.webhook.model.Destination;
 
 public interface DestinationRepository extends CrudRepository<Destination, Long> {
 	

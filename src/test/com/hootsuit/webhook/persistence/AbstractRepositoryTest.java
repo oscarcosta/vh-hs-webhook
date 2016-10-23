@@ -1,4 +1,4 @@
-package hootsuit.webhook.persistence;
+package com.hootsuit.webhook.persistence;
 
 import java.util.Arrays;
 
@@ -12,8 +12,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import hootsuit.webhook.model.Destination;
-import hootsuit.webhook.model.Message;
+import com.hootsuit.webhook.model.Destination;
+import com.hootsuit.webhook.model.Message;
+import com.hootsuit.webhook.persistence.DestinationRepository;
+import com.hootsuit.webhook.persistence.MessageRepository;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest

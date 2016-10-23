@@ -1,4 +1,4 @@
-package hootsuit.webhook.restcontrollers;
+package com.hootsuit.webhook.restcontrollers;
 
 import java.util.NoSuchElementException;
 
@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import hootsuit.webhook.events.MessageReceivedEvent;
-import hootsuit.webhook.model.Destination;
-import hootsuit.webhook.model.Message;
-import hootsuit.webhook.persistence.DestinationRepository;
-import hootsuit.webhook.persistence.MessageRepository;
+import com.hootsuit.webhook.events.MessageReceivedEvent;
+import com.hootsuit.webhook.model.Destination;
+import com.hootsuit.webhook.model.Message;
+import com.hootsuit.webhook.persistence.DestinationRepository;
+import com.hootsuit.webhook.persistence.MessageRepository;
 
 @RestController
 public class DestinationService implements ApplicationEventPublisherAware {

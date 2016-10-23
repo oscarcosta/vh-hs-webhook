@@ -1,4 +1,4 @@
-package hootsuit.webhook;
+package com.hootsuit.webhook;
 
 import java.util.concurrent.Executor;
 
@@ -13,7 +13,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@EnableJpaRepositories("hootsuit.webhook.persistence")
+@EnableJpaRepositories("com.hootsuit.webhook.persistence")
 @EnableJpaAuditing
 @EnableTransactionManagement
 @EnableAsync

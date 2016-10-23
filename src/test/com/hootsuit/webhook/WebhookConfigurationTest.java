@@ -1,4 +1,4 @@
-package hootsuit.webhook;
+package com.hootsuit.webhook;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.hootsuit.webhook.WebhookConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

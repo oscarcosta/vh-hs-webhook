@@ -1,4 +1,4 @@
-package hootsuit.webhook.services;
+package com.hootsuit.webhook.services;
 
 public class MessageProcessorException extends Exception {
 
