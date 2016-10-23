@@ -1,6 +1,5 @@
 package hootsuit.webhook.services;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -51,7 +50,6 @@ public class MessageProcessor {
 		
 		logger.debug("Listening Event for Message {}", message.getId());
 		
-		// Direct call
 		processMessagesForDestination(message.getDestination());
 	}
 	
@@ -66,21 +64,25 @@ public class MessageProcessor {
 	}
 	
 	private void processMessagesForDestination(Destination destination) {
-		List<Message> sentMessages = new ArrayList<>();
-		
-		logger.debug("Processing messages for Destination {}", destination.getUrl());
-		
-		List<Message> messages = messageRepository.findAllByDestinationOrderByIdAsc(destination);
-		for (Message message : messages) {
-			if (sendMessage(message)) {
-				sentMessages.add(message);
-			} else {
-				break;
+		try {
+			logger.debug("Processing messages for Destination {}", destination.getUrl());
+			
+			destinationRepository.setDestinationOnline(destination.getId());
+			
+			List<Message> messages = messageRepository.findAllByDestinationOrderByIdAsc(destination);
+			for (Message message : messages) {
+				if (message.isMessageTimeout()) {
+					deleteMessage(message);
+				} else {
+					sendMessage(message);
+				}
 			}
+		} catch (MessageProcessorException ex) {
+			logger.info("processMessagesForDestination caught an exception: {}", ex.getMessage());
 		}
 	}
-
-	private boolean sendMessage(Message message) {
+	
+	private void sendMessage(Message message) throws MessageProcessorException {
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.set(HttpHeaders.CONTENT_TYPE, message.getContentType());
@@ -93,27 +95,25 @@ public class MessageProcessor {
 			ResponseEntity<String> entity = restTemplate.postForEntity(message.getDestinationUrl(), request, String.class);
 			
 			if (entity.getStatusCode().equals(HttpStatus.OK)) {
-				onMessageSentOK(message);
-				return true;
+				onSendMessageSuccess(message);
 			} else {
-				onMessageSentError(message);
-				return false;
+				throw new MessageProcessorException("Non 200 HTTP response code!");
 			}
 		} catch (Exception ex) {
 			logger.info("sendMessage caught an exception: {}", ex.getMessage());
-			onMessageSentError(message);
-			return false;
+			
+			onSendMessageError(message);
+			throw new MessageProcessorException(ex.getMessage());
 		}
 	}
 	
-	private void onMessageSentOK(Message message) {
+	private void onSendMessageSuccess(Message message) {
 		logger.debug("Sent Message {}", message.getId());
 		
-		destinationRepository.setDestinationOnline(message.getDestinationId());
 		deleteMessage(message);
 	}
 	
-	private void onMessageSentError(Message message) {
+	private void onSendMessageError(Message message) {
 		logger.debug("Unsent Message {}", message.getId());
 		
 		destinationRepository.setDestinationOffline(message.getDestinationId());
