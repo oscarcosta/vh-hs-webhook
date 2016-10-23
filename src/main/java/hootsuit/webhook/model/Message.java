@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Message {
+	
+	static final long MESSAGE_TIMEOUT = 24 * 60 * 60 * 1000;
 
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -67,8 +69,8 @@ public class Message {
 		return destination.getUrl(); 
 	}
 	
-	public Boolean isDestinationOnline() {
-		return destination.isOnline();
+	public Boolean isMessageTimeout() {
+		return timestamp.getTime() < System.currentTimeMillis() - MESSAGE_TIMEOUT;
 	}
 	
 	@Override
