@@ -33,6 +33,7 @@ public class DestinationService implements ApplicationEventPublisherAware {
 	@Autowired
 	private MessageRepository messageRepository;
 	
+	// Event publisher
 	private ApplicationEventPublisher applicationEventPublisher;
 	
 	/**
@@ -86,15 +87,16 @@ public class DestinationService implements ApplicationEventPublisherAware {
 		
 		logger.debug("Received Message {} for Destination {}", message.getId(), message.getDestinationUrl());
 		
-		// Publishes the event of received message
+		// Publishes the received message's event 
 		applicationEventPublisher.publishEvent(new MessageReceivedEvent(this, message));
 	}
 	
+	// Register event publisher
 	@Override
 	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
 		this.applicationEventPublisher = applicationEventPublisher;
 	}
-
+	
 	private Destination getDestination(Long id) throws NoSuchElementException {
 		Destination destination = destinationRepository.findOne(id);
 		if (destination == null) {

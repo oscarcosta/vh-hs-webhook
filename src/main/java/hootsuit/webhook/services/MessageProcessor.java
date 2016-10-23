@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import hootsuit.webhook.events.MessageReceivedEvent;
 import hootsuit.webhook.model.Destination;
 import hootsuit.webhook.model.Message;
 import hootsuit.webhook.persistence.DestinationRepository;
@@ -37,6 +39,20 @@ public class MessageProcessor {
 	
 	public MessageProcessor(RestTemplateBuilder restTemplateBuilder) {
 		this.restTemplate = restTemplateBuilder.build();
+	}
+	
+	/**
+	 * Async EventListener for MessageReceivedEvent
+	 */
+	@Async
+	@EventListener
+	public void messageReceivedListener(MessageReceivedEvent messageReceivedEvent) {
+		Message message = messageReceivedEvent.getMessage();
+		
+		logger.debug("Listening Event for Message {}", message.getId());
+		
+		// Direct call
+		processMessagesForDestination(message.getDestination());
 	}
 	
 	/**
