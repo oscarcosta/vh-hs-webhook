@@ -51,9 +51,9 @@ public class MessageRequestService {
 			ResponseEntity<String> entity = restTemplate.postForEntity(message.getDestinationUrl(), request, String.class);
 			
 			if (entity.getStatusCode().equals(HttpStatus.OK)) {
-				onMessageSent(message);
+				onMessageSentOK(message);
 			} else {
-				onMessageUnsent(message);
+				onMessageSentError(message);
 			}
 		} catch (Exception ex) {
 			logger.info("sendMessage caught an exception: {}", ex.getMessage());
@@ -62,14 +62,14 @@ public class MessageRequestService {
 		return new AsyncResult<>(message);
 	}
 	
-	private void onMessageSent(Message message) {
+	private void onMessageSentOK(Message message) {
 		logger.debug("Sent Message {}", message.getId());
 		
 		destinationRepository.setDestinationOnline(message.getDestinationId());
 		deleteMessage(message);
 	}
 	
-	private void onMessageUnsent(Message message) {
+	private void onMessageSentError(Message message) {
 		logger.debug("Unsent Message {}", message.getId());
 		
 		destinationRepository.setDestinationOffline(message.getDestinationId());

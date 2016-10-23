@@ -5,6 +5,8 @@ import java.util.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,13 +16,14 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import hootsuit.webhook.events.MessageReceivedEvent;
 import hootsuit.webhook.model.Destination;
 import hootsuit.webhook.model.Message;
 import hootsuit.webhook.persistence.DestinationRepository;
 import hootsuit.webhook.persistence.MessageRepository;
 
 @RestController
-public class DestinationService {
+public class DestinationService implements ApplicationEventPublisherAware {
 	
 	private static final Logger logger = LoggerFactory.getLogger(DestinationService.class);
 	
@@ -30,8 +33,7 @@ public class DestinationService {
 	@Autowired
 	private MessageRepository messageRepository;
 	
-	@Autowired
-	private MessageRequestService messageRequestService;
+	private ApplicationEventPublisher applicationEventPublisher;
 	
 	/**
 	 * Register a new destination (URL) returning its id
@@ -84,11 +86,15 @@ public class DestinationService {
 		
 		logger.debug("Received Message {} for Destination {}", message.getId(), message.getDestinationUrl());
 		
-		if (message.isDestinationOnline()) {
-			messageRequestService.sendMessage(message);
-		}
+		// Publishes the event of received message
+		applicationEventPublisher.publishEvent(new MessageReceivedEvent(this, message));
 	}
 	
+	@Override
+	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+		this.applicationEventPublisher = applicationEventPublisher;
+	}
+
 	private Destination getDestination(Long id) throws NoSuchElementException {
 		Destination destination = destinationRepository.findOne(id);
 		if (destination == null) {
