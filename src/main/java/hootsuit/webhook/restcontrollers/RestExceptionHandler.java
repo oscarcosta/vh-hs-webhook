@@ -1,4 +1,4 @@
-package hootsuit.webhook.services;
+package hootsuit.webhook.restcontrollers;
 
 import java.util.NoSuchElementException;
 

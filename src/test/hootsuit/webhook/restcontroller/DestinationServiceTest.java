@@ -1,4 +1,4 @@
-package hootsuit.webhook.services;
+package hootsuit.webhook.restcontroller;
 
 import static org.assertj.core.api.Assertions.*;
 
