@@ -96,11 +96,11 @@ public class PersistenceTest {
 	public void getAllDestinationMessagesOrderedCorrectly() {
 		logger.debug("getAllDestinationMessagesCorrectly");
 		
-		List<Message> googleResult = (List<Message>) messageRepository.findByDestinationOrderByIdAsc(googleDest);
+		List<Message> googleResult = (List<Message>) messageRepository.findAllByDestinationOrderByIdAsc(googleDest);
 		assertThat(googleResult.size()).isEqualTo(2);
 		assertThat(googleResult).containsSequence(googleMessage1, googleMessage2);
 		
-		List<Message> trelloResult = (List<Message>) messageRepository.findByDestinationOrderByIdAsc(trelloDest);
+		List<Message> trelloResult = (List<Message>) messageRepository.findAllByDestinationOrderByIdAsc(trelloDest);
 		assertThat(trelloResult.size()).isEqualTo(0);
 	}
 	

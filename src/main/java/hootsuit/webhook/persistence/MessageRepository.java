@@ -9,7 +9,7 @@ import hootsuit.webhook.model.Message;
 
 public interface MessageRepository extends CrudRepository<Message, Long> {
 
-	List<Message> findByDestinationOrderByIdAsc(Destination destination);
+	List<Message> findAllByDestinationOrderByIdAsc(Destination destination);
 	
 	List<Message> findAllByOrderByTimestampAsc();
 	
