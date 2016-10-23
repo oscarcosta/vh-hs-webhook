@@ -52,8 +52,8 @@ public class DestinationServiceTest {
 	@Autowired
 	private MessageRepository messageRepository;
 	
-	private Destination googleDest;
-	private Destination trelloDest;
+	private Destination httpbinDest;
+	private Destination posttestDest;
 	
 	private Message googleMessage1;
 	private Message googleMessage2;
@@ -65,13 +65,13 @@ public class DestinationServiceTest {
 		messageRepository.deleteAll();
 		destinationRepository.deleteAll();
 		
-		googleDest = new Destination("http://www.google.com");
-		trelloDest = new Destination("http://www.trello.com");
+		httpbinDest = new Destination("https://httpbin.org/post");
+		posttestDest = new Destination("http://posttestserver.com/post.php?dir=webhook");
 		
-		destinationRepository.save(Arrays.asList(googleDest, trelloDest));
+		destinationRepository.save(Arrays.asList(httpbinDest, posttestDest));
 		
-		googleMessage1 = new Message("#safe=off&q=hootsuite", "text/html", googleDest);
-		googleMessage2 = new Message("#safe=off&q=vanhack", "text/html", googleDest);
+		googleMessage1 = new Message("#safe=off&q=hootsuite", "text/plain", httpbinDest);
+		googleMessage2 = new Message("#safe=off&q=vanhack", "text/plain", httpbinDest);
 		
 		messageRepository.save(Arrays.asList(googleMessage1, googleMessage2));
 	}
@@ -104,7 +104,7 @@ public class DestinationServiceTest {
 		assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(entity.getBody()).isNotNull();
 		assertThat(entity.getBody().length).isGreaterThanOrEqualTo(2);
-		assertThat(entity.getBody()).contains(googleDest, trelloDest);
+		assertThat(entity.getBody()).contains(httpbinDest, posttestDest);
 	}
 	
 	@Test
@@ -112,7 +112,7 @@ public class DestinationServiceTest {
 		logger.debug("deleteDestinationTest");
 		
 		Map<String, Long> urlVariables = new LinkedHashMap<>();
-		urlVariables.put("id", googleDest.getId());
+		urlVariables.put("id", httpbinDest.getId());
 		
 		restTemplate.delete(getBaseUrl() + "/destinations/{id}", urlVariables);
 		
@@ -120,7 +120,7 @@ public class DestinationServiceTest {
 		ResponseEntity<Destination[]> entity = restTemplate.getForEntity(getBaseUrl() + "/destinations", 
 			     														 Destination[].class);
 		
-		assertThat(entity.getBody()).doesNotContain(googleDest);
+		assertThat(entity.getBody()).doesNotContain(httpbinDest);
 	}
 	
 	@Test
@@ -132,7 +132,7 @@ public class DestinationServiceTest {
 		HttpEntity<String> request = new HttpEntity<String>("#safe=off&q=hackathon" ,headers);
 		
 		Map<String, Long> urlVariables = new LinkedHashMap<>();
-		urlVariables.put("id", googleDest.getId());
+		urlVariables.put("id", httpbinDest.getId());
 		
 		ResponseEntity<Object> entity = restTemplate.postForEntity(getBaseUrl() + "/destinations/{id}/message", 
 																   request,
