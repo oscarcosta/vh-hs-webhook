@@ -36,20 +36,27 @@ public class MessageRequestService {
 		this.restTemplate = restTemplateBuilder.build();
 	}
 
+	/**
+	 * Send the message to destination asynchronously
+	 */
 	@Async
 	public Future<Message> sendMessage(Message message) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.set(HttpHeaders.CONTENT_TYPE, message.getContentType());
-		HttpEntity<String> request = new HttpEntity<>(message.getMessageBody() ,headers);
-		
-		logger.debug("Sending Message {} to Destination {}", message.getId(), message.getDestinationUrl());
-		
-		ResponseEntity<String> entity = restTemplate.postForEntity(message.getDestinationUrl(), request, String.class);
-		
-		if (entity.getStatusCode().equals(HttpStatus.OK)) {
-			onMessageSent(message);
-		} else {
-			onMessageUnsent(message);
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.set(HttpHeaders.CONTENT_TYPE, message.getContentType());
+			HttpEntity<String> request = new HttpEntity<>(message.getMessageBody() ,headers);
+			
+			logger.debug("Sending Message {} to Destination {}", message.getId(), message.getDestinationUrl());
+			
+			ResponseEntity<String> entity = restTemplate.postForEntity(message.getDestinationUrl(), request, String.class);
+			
+			if (entity.getStatusCode().equals(HttpStatus.OK)) {
+				onMessageSent(message);
+			} else {
+				onMessageUnsent(message);
+			}
+		} catch (Exception ex) {
+			logger.info("sendMessage caught an exception: {}", ex.getMessage());
 		}
 		
 		return new AsyncResult<>(message);

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import hootsuit.webhook.model.Destination;
 import hootsuit.webhook.model.Message;
 import hootsuit.webhook.persistence.DestinationRepository;
+import hootsuit.webhook.persistence.MessageRepository;
 
 @RestController
 public class DestinationService {
@@ -27,7 +28,10 @@ public class DestinationService {
 	private DestinationRepository destinationRepository;
 	
 	@Autowired
-	private MessageService messageService;
+	private MessageRepository messageRepository;
+	
+	@Autowired
+	private MessageRequestService messageRequestService;
 	
 	/**
 	 * Register a new destination (URL) returning its id
@@ -48,6 +52,8 @@ public class DestinationService {
 	 */
 	@GetMapping("/destinations")
 	public Iterable<Destination> listDestinations() {
+		logger.debug("Listing Destinations");
+		
 		return destinationRepository.findAll();
 	}
 	
@@ -74,7 +80,13 @@ public class DestinationService {
 		
 		Destination destination = getDestination(id);
 		
-		messageService.postMessageToDestination(new Message(body, contentType, destination));
+		Message message = messageRepository.save(new Message(body, contentType, destination));
+		
+		logger.debug("Received Message {} for Destination {}", message.getId(), message.getDestinationUrl());
+		
+		if (message.isDestinationOnline()) {
+			messageRequestService.sendMessage(message);
+		}
 	}
 	
 	private Destination getDestination(Long id) throws NoSuchElementException {
