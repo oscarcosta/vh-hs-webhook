@@ -60,7 +60,7 @@ public class MessageProcessor {
 	/**
 	 * Scheduled method to process the messages saved on database
 	 */
-	@Scheduled(cron="0 */6 * * * *") // Run at minute 0 past every 6th hour.
+	@Scheduled(cron="0 0 */6 * * *") // Run at minute 0 past every 6th hour.
 	public void scheduledMessagesProcessor() {
 		logger.debug("Executing scheduled message processor at {}", new Date(System.currentTimeMillis()));
 		
