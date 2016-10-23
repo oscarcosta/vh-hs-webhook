@@ -141,5 +141,19 @@ public class DestinationServiceTest {
 		
 		assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
+	
+	@Test
+	public void exceptionsHandlerTest() {
+		logger.debug("exceptionsHandlerTest");
+		
+		MultiValueMap<String, String> request = new LinkedMultiValueMap<>();
+		request.add("url", "");
+		
+		ResponseEntity<String> entity = restTemplate.postForEntity(getBaseUrl() + "/destinations", 
+																   request,
+																   String.class);
+		
+		assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+	}
 
 }
