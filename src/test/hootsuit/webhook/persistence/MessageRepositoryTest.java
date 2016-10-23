@@ -11,41 +11,18 @@ import hootsuit.webhook.model.*;
 public class MessageRepositoryTest extends AbstractRepositoryTest {
 	
 	/**
-	 * Test the MessageRepository.findFirstByDestinationOrderByIdAsc() method.
-	 */
-	@Test
-	public void getFirstDestinationMessageCorrectly() {
-		logger.debug("getFirstDestinationMessageCorrectly");
-		
-		Message result = messageRepository.findFirstByDestinationOrderByIdAsc(googleDest);
-		assertThat(result).isEqualTo(googleMessage1);
-	}
-	
-	/**
-	 * Test the MessageRepository.findByDestinationOrderByIdAsc() method.
+	 * Test the MessageRepository.findAllByDestinationOrderByIdAsc() method.
 	 */
 	@Test
 	public void getAllDestinationMessagesOrderedCorrectly() {
 		logger.debug("getAllDestinationMessagesCorrectly");
 		
-		List<Message> googleResult = (List<Message>) messageRepository.findAllByDestinationOrderByIdAsc(googleDest);
+		List<Message> googleResult = messageRepository.findAllByDestinationOrderByIdAsc(googleDest);
 		assertThat(googleResult.size()).isEqualTo(2);
 		assertThat(googleResult).containsSequence(googleMessage1, googleMessage2);
 		
-		List<Message> trelloResult = (List<Message>) messageRepository.findAllByDestinationOrderByIdAsc(trelloDest);
+		List<Message> trelloResult = messageRepository.findAllByDestinationOrderByIdAsc(trelloDest);
 		assertThat(trelloResult.size()).isEqualTo(0);
 	}
 	
-	/**
-	 * Test the MessageRepository.findAllByOrderByTimestampAsc() method.
-	 */
-	@Test
-	public void gellAllMessagesOrderedCorrectly() {
-		logger.debug("gellAllMessagesOrdered");
-		
-		List<Message> result = (List<Message>) messageRepository.findAllByOrderByTimestampAsc();
-		assertThat(result.size()).isEqualTo(2);
-		assertThat(result).containsSequence(googleMessage1, googleMessage2);
-	}
-
 }
