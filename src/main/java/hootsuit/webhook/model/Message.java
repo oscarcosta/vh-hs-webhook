@@ -59,6 +59,18 @@ public class Message {
 		return destination;
 	}
 	
+	public Long getDestinationId() {
+		return destination.getId();
+	}
+	
+	public String getDestinationUrl() {
+		return destination.getUrl(); 
+	}
+	
+	public Boolean isDestinationOnline() {
+		return destination.isOnline();
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
