@@ -11,6 +11,17 @@ import hootsuit.webhook.model.*;
 public class MessageRepositoryTest extends AbstractRepositoryTest {
 	
 	/**
+	 * Test the MessageRepository.findFirstByDestinationOrderByIdAsc() method.
+	 */
+	@Test
+	public void getFirstDestinationMessageCorrectly() {
+		logger.debug("getFirstDestinationMessageCorrectly");
+		
+		Message result = messageRepository.findFirstByDestinationOrderByIdAsc(googleDest);
+		assertThat(result).isEqualTo(googleMessage1);
+	}
+	
+	/**
 	 * Test the MessageRepository.findByDestinationOrderByIdAsc() method.
 	 */
 	@Test
