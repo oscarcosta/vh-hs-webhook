@@ -9,6 +9,8 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,6 +33,8 @@ import hootsuit.webhook.persistence.MessageRepository;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = WebhookConfiguration.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class DestinationServiceTest {
+	
+	private static final Logger logger = LoggerFactory.getLogger(DestinationServiceTest.class);
 	
 	@LocalServerPort
 	private int port;
@@ -56,6 +60,8 @@ public class DestinationServiceTest {
 	
 	@Before
 	public void setUp() {
+		logger.debug("setUp");
+		
 		messageRepository.deleteAll();
 		destinationRepository.deleteAll();
 		
@@ -72,6 +78,8 @@ public class DestinationServiceTest {
 
 	@Test
 	public void registerNewDestinationTest() {
+		logger.debug("registerNewDestinationTest");
+		
 		MultiValueMap<String, String> request = new LinkedMultiValueMap<>();
 		request.add("url", "http://www.slack.com");
 		
@@ -88,6 +96,8 @@ public class DestinationServiceTest {
 	
 	@Test
 	public void listDestinationsTest() {
+		logger.debug("listDestinationsTest");
+		
 		ResponseEntity<Destination[]> entity = restTemplate.getForEntity(getBaseUrl() + "/destinations", 
 																	     Destination[].class);
 		
@@ -99,6 +109,8 @@ public class DestinationServiceTest {
 	
 	@Test
 	public void deleteDestinationTest() {
+		logger.debug("deleteDestinationTest");
+		
 		Map<String, Long> urlVariables = new LinkedHashMap<>();
 		urlVariables.put("id", googleDest.getId());
 		
@@ -113,6 +125,8 @@ public class DestinationServiceTest {
 	
 	@Test
 	public void postMessageToDestinationTest() {
+		logger.debug("postMessageToDestinationTest");
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.TEXT_HTML);
 		HttpEntity<String> request = new HttpEntity<String>("#safe=off&q=hackathon" ,headers);

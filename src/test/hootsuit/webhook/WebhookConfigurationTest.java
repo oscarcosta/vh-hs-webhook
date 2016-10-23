@@ -2,6 +2,8 @@ package hootsuit.webhook;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.LocalServerPort;
@@ -19,6 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestPropertySource(properties = {"management.port=0"})
 public class WebhookConfigurationTest {
 	
+	private static final Logger logger = LoggerFactory.getLogger(WebhookConfigurationTest.class);
+	
 	@LocalServerPort
 	private int port;
 	
@@ -30,6 +34,8 @@ public class WebhookConfigurationTest {
 
 	@Test
 	public void shouldReturn200WhenSendingRequestToController() throws Exception {
+		logger.debug("shouldReturn200WhenSendingRequestToController");
+		
 		ResponseEntity<Object> entity = restTemplate.getForEntity("http://localhost:" + port + "/destinations", 
 															      Object.class);
 		assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -37,6 +43,8 @@ public class WebhookConfigurationTest {
 	
 	@Test
 	public void shouldReturn200WhenSendingRequestToManagementEndpoint() throws Exception {
+		logger.debug("shouldReturn200WhenSendingRequestToManagementEndpoint");
+		
 		ResponseEntity<Object> entity = restTemplate.getForEntity("http://localhost:" + managementPort + "/info", 
 																  Object.class);
 		assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
